@@ -1,5 +1,19 @@
 {
-    "require": {
-        "doctrine/orm": "^2.5"
+  "require": {
+      "doctrine/orm": "^2.5"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.8.*",
+    "mockery/mockery": "^0.9.4",
+    "codeclimate/php-test-reporter": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {"pmill\\Doctrine\\Hydrator\\": "src/"}
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "pmill\\Doctrine\\Hydrator\\Test\\": "tests/unit/",
+      "pmill\\Doctrine\\Hydrator\\Test\\Fixture\\": "tests/fixtures/"
     }
+  }
 }
