@@ -61,7 +61,7 @@ We can populate this object with an array, for example:
 
     $data = [
         'name'=>'Fred Jones',
-        'email'=>'fread@example.com',
+        'email'=>'fred@example.com',
         'company'=>2,
         'permissions'=>[1, 2, 3, 4];
     ];
@@ -72,6 +72,6 @@ We can populate this object with an array, for example:
 Copyright
 ---------
 
-Doctrine Array to Entity  sHydrator
+Doctrine Array to Entity Hydrator
 Copyright (c) 2015 pmill (dev.pmill@gmail.com) 
 All rights reserved.
