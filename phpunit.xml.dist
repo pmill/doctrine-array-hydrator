@@ -12,6 +12,8 @@
     <filter>
         <blacklist>
             <directory>./vendor</directory>
+            <directory>./tests</directory>
+            <directory>./build</directory>
         </blacklist>
     </filter>
 </phpunit>

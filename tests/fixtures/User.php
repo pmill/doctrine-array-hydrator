@@ -95,22 +95,6 @@ class User
     }
 
     /**
-     * @return int
-     */
-    public function getCompanyId()
-    {
-        return $this->company_id;
-    }
-
-    /**
-     * @param int $company_id
-     */
-    public function setCompanyId($company_id)
-    {
-        $this->company_id = $company_id;
-    }
-
-    /**
      * @return Company
      */
     public function getCompany()

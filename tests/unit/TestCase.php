@@ -2,7 +2,6 @@
 namespace pmill\Doctrine\Hydrator\Test;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\ORM\EntityManager;
@@ -55,10 +54,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             'driver'=>'pdo_sqlite',
             'dbname'=>':memory:',
         ];
-        $doctrineConfig = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(['tests/fixtures/'], false, null, new ArrayCache(), false);
+        $doctrineConfig = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(['tests/fixtures/'], false, getcwd().'/build/tmp', new ArrayCache(), false);
+        $doctrineConfig->setAutoGenerateProxyClasses(true);
 
         $this->entityManager = EntityManager::create($databaseConfig, $doctrineConfig);
-        $this->annotationReader = $this->entityManager->getConfiguration()->getMetadataDriverImpl(); //newDefaultAnnotationDriver('tests/fixtures/', false)->getReader();
+        $this->annotationReader = $this->entityManager->getConfiguration()->getMetadataDriverImpl();
     }
 
     /**
