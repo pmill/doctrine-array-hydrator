@@ -1,10 +1,10 @@
-Doctrine Array to Entity Hydrator (WIP)
+Doctrine Array to Entity Hydrator
 ================
 
 Introduction
 ------------
 
-[![Build Status](https://secure.travis-ci.org/pmill/doctrine-rest.svg?branch=master)](http://travis-ci.org/pmill/doctrine-rest) [![Code Climate](https://codeclimate.com/github/pmill/doctrine-rest/badges/gpa.svg)](https://codeclimate.com/github/pmill/doctrine-rest) [![Test Coverage](https://codeclimate.com/github/pmill/doctrine-rest/badges/coverage.svg)](https://codeclimate.com/github/pmill/doctrine-rest/coverage) [![Test Coverage](https://scrutinizer-ci.com/g/pmill/doctrine-rest/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pmill/doctrine-rest/)
+[![Build Status](https://secure.travis-ci.org/pmill/doctrine-array-hydrator.svg?branch=master)](http://travis-ci.org/pmill/doctrine-array-hydrator) [![Code Climate](https://codeclimate.com/github/pmill/doctrine-array-hydrator/badges/gpa.svg)](https://codeclimate.com/github/pmill/doctrine-array-hydrator) [![Test Coverage](https://codeclimate.com/github/pmill/doctrine-array-hydrator/badges/coverage.svg)](https://codeclimate.com/github/pmill/doctrine-array-hydrator/coverage) [![Test Coverage](https://scrutinizer-ci.com/g/pmill/doctrine-array-hydrator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pmill/doctrine-array-hydrator/)
 
 
 A hydrator for doctrine 2 that converts an array to the entity of your choice.
@@ -66,8 +66,8 @@ We can populate this object with an array, for example:
         'permissions'=>[1, 2, 3, 4];
     ];
 
-    $hydrator = new \pmill\Doctrine\Hydrator\Array($entityManager);
-    $entity = $hydrator->hydrate($entityClassOrObject, $data);
+    $hydrator = new \pmill\Doctrine\Hydrator\ArrayHydrator($entityManager);
+    $entity = $hydrator->hydrate('App\Entity\User', $data);
 
 Copyright
 ---------

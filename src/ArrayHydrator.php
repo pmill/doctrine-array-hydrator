@@ -80,13 +80,13 @@ class ArrayHydrator
     protected function hydrateAssociations($entity, $data)
     {
         $metaData = $this->entityManager->getClassMetadata(get_class($entity));
-        foreach ($metaData->associationMappings as $propertyName=>$mapping) {
+        foreach ($metaData->associationMappings as $propertyName => $mapping) {
             if (isset($data[$propertyName])) {
-                if ($mapping['type'] == ClassMetadataInfo::ONE_TO_ONE || $mapping['type'] == ClassMetadataInfo::MANY_TO_ONE) {
+                if (in_array($mapping['type'], [ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::MANY_TO_ONE])) {
                     $entity = $this->hydrateToOneAssociation($entity, $propertyName, $mapping, $data[$propertyName]);
                 }
 
-                if ($mapping['type'] == ClassMetadataInfo::ONE_TO_MANY || $mapping['type'] == ClassMetadataInfo::MANY_TO_MANY) {
+                if (in_array($mapping['type'], [ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY])) {
                     $entity = $this->hydrateToManyAssociation($entity, $propertyName, $mapping, $data[$propertyName]);
                 }
             }
@@ -145,7 +145,7 @@ class ArrayHydrator
      * @param null $reflectionObject
      * @return mixed
      */
-    protected function setProperty($entity, $propertyName, $value, $reflectionObject=null)
+    protected function setProperty($entity, $propertyName, $value, $reflectionObject = null)
     {
         $reflectionObject = is_null($reflectionObject) ? new \ReflectionObject($entity) : $reflectionObject;
         $property = $reflectionObject->getProperty($propertyName);
@@ -170,5 +170,4 @@ class ArrayHydrator
 
         return $this->entityManager->find($className, $id);
     }
-
 }
