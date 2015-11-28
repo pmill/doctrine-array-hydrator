@@ -127,8 +127,11 @@ class ArrayHydrator
         $values = is_array($value) ? $value : [$value];
 
         $assocationObjects = [];
-        foreach ($values as $id) {
-            if ($associationObject = $this->fetchAssociationEntity($mapping['targetEntity'], $id)) {
+        foreach ($values as $value) {
+            if (is_array($value)) {
+                $assocationObjects[] = $this->hydrate($mapping['targetEntity'], $value);
+            }
+            elseif ($associationObject = $this->fetchAssociationEntity($mapping['targetEntity'], $value)) {
                 $assocationObjects[] = $associationObject;
             }
         }

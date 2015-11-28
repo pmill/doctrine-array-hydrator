@@ -41,7 +41,7 @@ class User
     protected $address;
 
     /**
-     * @ORM\OneToMany(targetEntity="Permission", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="Permission", mappedBy="user")
      * @var Permission[]
      */
     protected $permissions;

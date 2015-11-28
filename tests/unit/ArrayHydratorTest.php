@@ -3,6 +3,7 @@ namespace pmill\Doctrine\Hydrator\Test;
 
 use Mockery as m;
 use pmill\Doctrine\Hydrator\ArrayHydrator;
+use pmill\Doctrine\Hydrator\Test\Fixture\Permission;
 
 class RouteTest extends TestCase
 {
@@ -25,7 +26,7 @@ class RouteTest extends TestCase
             'email'=>'fred@example.org',
         ];
 
-        $user = new \pmill\Doctrine\Hydrator\Test\Fixture\User;
+        $user = new Fixture\User;
         $user = $this->hydrator->hydrate($user, $data);
 
         $this->assertEquals($data['id'], $user->getId());
@@ -39,8 +40,8 @@ class RouteTest extends TestCase
             'company'=>1,
         ];
 
-        $user = new \pmill\Doctrine\Hydrator\Test\Fixture\User;
-        /** @var \pmill\Doctrine\Hydrator\Test\Fixture\User $user */
+        $user = new Fixture\User;
+        /** @var Fixture\User $user */
         $user = $this->hydrator->hydrate($user, $data);
 
         $this->assertEquals(1, $user->getCompany()->getId());
@@ -52,8 +53,8 @@ class RouteTest extends TestCase
             'permissions'=>[1,2,3,4,5],
         ];
 
-        $user = new \pmill\Doctrine\Hydrator\Test\Fixture\User;
-        /** @var \pmill\Doctrine\Hydrator\Test\Fixture\User $user */
+        $user = new Fixture\User;
+        /** @var Fixture\User $user */
         $user = $this->hydrator->hydrate($user, $data);
 
         $permissions = $user->getPermissions();
@@ -62,6 +63,31 @@ class RouteTest extends TestCase
         $this->assertEquals(3, $permissions[2]->getId());
         $this->assertEquals(4, $permissions[3]->getId());
         $this->assertEquals(5, $permissions[4]->getId());
+    }
+
+    public function testHydrateOneToManyObjects()
+    {
+        $data = [
+            'name' => 'George',
+            'permissions' => [
+                ['name' => 'New Permission 1'],
+                ['name' => 'New Permission 2'],
+            ],
+        ];
+
+        $user = new Fixture\User;
+        /** @var Fixture\User $user */
+        $user = $this->hydrator->hydrate($user, $data);
+
+        $this->assertEquals($data['name'], $user->getName());
+
+        $permissions = $user->getPermissions();
+        foreach ($permissions as $permission) {
+            $this->assertInstanceOf(Permission::class, $permission);
+        }
+
+        $this->assertEquals($data['permissions'][0]['name'], $permissions[0]->getName());
+        $this->assertEquals($data['permissions'][1]['name'], $permissions[1]->getName());
     }
 
     public function testHydrateAll()
@@ -74,8 +100,8 @@ class RouteTest extends TestCase
             'permissions'=>[1,2,3,4,5],
         ];
 
-        $user = new \pmill\Doctrine\Hydrator\Test\Fixture\User;
-        /** @var \pmill\Doctrine\Hydrator\Test\Fixture\User $user */
+        $user = new Fixture\User;
+        /** @var Fixture\User $user */
         $user = $this->hydrator->hydrate($user, $data);
 
         $this->assertEquals($data['id'], $user->getId());
