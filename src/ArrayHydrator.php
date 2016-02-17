@@ -63,8 +63,9 @@ class ArrayHydrator
         $reflectionObject = new \ReflectionObject($entity);
 
         $metaData = $this->entityManager->getClassMetadata(get_class($entity));
+
         foreach ($metaData->columnNames as $propertyName) {
-            if (isset($data[$propertyName])) {
+            if (isset($data[$propertyName]) && !in_array($propertyName, $metaData->identifier)) {
                 $entity = $this->setProperty($entity, $propertyName, $data[$propertyName], $reflectionObject);
             }
         }

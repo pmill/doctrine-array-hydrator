@@ -29,7 +29,7 @@ class RouteTest extends TestCase
         $user = new Fixture\User;
         $user = $this->hydrator->hydrate($user, $data);
 
-        $this->assertEquals($data['id'], $user->getId());
+        $this->assertNull($user->getId());
         $this->assertEquals($data['name'], $user->getName());
         $this->assertEquals($data['email'], $user->getEmail());
     }
@@ -104,7 +104,7 @@ class RouteTest extends TestCase
         /** @var Fixture\User $user */
         $user = $this->hydrator->hydrate($user, $data);
 
-        $this->assertEquals($data['id'], $user->getId());
+        $this->assertNull($user->getId());
         $this->assertEquals($data['name'], $user->getName());
         $this->assertEquals($data['email'], $user->getEmail());
 
