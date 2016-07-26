@@ -9,6 +9,13 @@ Introduction
 
 A hydrator for doctrine 2 that converts an array to the entity of your choice.
 
+Installing via Composer
+-----------------------
+
+The recommended way to install is through
+[Composer](http://getcomposer.org).
+
+    composer require pmill/doctrine-array-hydrator
 
 Example
 -------
