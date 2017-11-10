@@ -41,25 +41,14 @@ class JsonApiHydrator extends ArrayHydrator
                     throw new \Exception(sprintf('Relation `%s` association not found', $name));
                 }
 
-                if (is_array($data['data'])) {
-                    if (isset($data['data']['id']) && isset($data['data']['type'])) {
-                        $this->hydrateToOneAssociation($entity, $name,
-                            $metadata->associationMappings[$name],
-                            $data['data']['id']
-                        );
-                    } else {
-                        $this->hydrateToManyAssociation($entity, $name,
-                            $metadata->associationMappings[$name],
-                            array_map(
-                                function ($relation) {
-                                    if (isset($relation['id']) && isset($relation['type'])) {
-                                        return $relation['id'];
-                                    }
+                $mapping = $metadata->associationMappings[$name];
 
-                                    return ['attributes' => $relation];
-                                },
-                                $data['data']
-                            )
+                if (is_array($data['data'])) {
+                    if ($resourceId = $this->getResourceId($data['data'])) {
+                        $this->hydrateToOneAssociation($entity, $name, $mapping, $resourceId);
+                    } else {
+                        $this->hydrateToManyAssociation($entity, $name, $mapping,
+                            $this->mapRelationshipsArray($data['data'])
                         );
                     }
                 }
@@ -67,5 +56,34 @@ class JsonApiHydrator extends ArrayHydrator
         }
 
         return $entity;
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function mapRelationshipsArray(array $data)
+    {
+        return array_map(
+            function ($relation) {
+                return $this->getResourceId($relation) ?: ['attributes' => $relation];
+            },
+            $data
+        );
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return int|null
+     */
+    protected function getResourceId(array $data)
+    {
+        if (isset($data['id']) && isset($data['type'])) {
+            return $data['id'];
+        }
+
+        return null;
     }
 }
