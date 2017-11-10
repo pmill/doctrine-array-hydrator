@@ -125,14 +125,4 @@ class JsonApiHydratorTest extends TestCase
             ]
         ]);
     }
-
-    public function testInvalidEntityException()
-    {
-        $this->setExpectedException(
-            \InvalidArgumentException::class,
-            'Entity passed to JsonApiHydrator::hydrate() must be a class name or entity object'
-        );
-
-        $this->hydrator->hydrate(1, []);
-    }
 }

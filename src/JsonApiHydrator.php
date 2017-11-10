@@ -3,32 +3,20 @@ namespace pmill\Doctrine\Hydrator;
 
 /**
  * Json API Request Doctrine Hydrator
+ * @link http://jsonapi.org/format/#document-resource-objects
  */
 class JsonApiHydrator extends ArrayHydrator
 {
     /**
-     * @link http://jsonapi.org/format/#document-resource-objects
-     * @param object|string $entity     Doctrine entity or class name
-     * @param array         $data       Data to hydrate
+     * @param $entity
+     * @param $data
      *
-     * @return mixed|object
+     * @return object
      */
-    public function hydrate($entity, array $data)
+    protected function hydrateProperties($entity, $data)
     {
-        if (is_string($entity) && class_exists($entity)) {
-            $entity = new $entity;
-        } elseif (!is_object($entity)) {
-            throw new \InvalidArgumentException(
-                'Entity passed to JsonApiHydrator::hydrate() must be a class name or entity object'
-            );
-        }
-
         if (isset($data['attributes']) && is_array($data['attributes'])) {
-            $entity = $this->hydrateProperties($entity, $data['attributes']);
-        }
-
-        if (isset($data['relationships']) && is_array($data['relationships'])) {
-            $entity = $this->hydrateRelationships($entity, $data['relationships']);
+            $entity = parent::hydrateProperties($entity, $data['attributes']);
         }
 
         return $entity;
@@ -37,40 +25,43 @@ class JsonApiHydrator extends ArrayHydrator
     /**
      * Map JSON API resource relations to doctrine entity.
      *
-     * @param       $entity
-     * @param array $relationships
+     * @param object $entity
+     * @param array  $data
      *
-     * @return array
+     * @return mixed
      * @throws \Exception
      */
-    protected function hydrateRelationships($entity, array $relationships)
+    protected function hydrateAssociations($entity, $data)
     {
-        $metadata = $this->entityManager->getClassMetadata(get_class($entity));
-        foreach ($relationships as $name => $data) {
-            if (!isset($metadata->associationMappings[$name])) {
-                throw new \Exception(sprintf('Relation `%s` association not found', $name));
-            }
+        if (isset($data['relationships']) && is_array($data['relationships'])) {
+            $metadata = $this->entityManager->getClassMetadata(get_class($entity));
 
-            if (is_array($data['data'])) {
-                if (isset($data['data']['id']) && isset($data['data']['type'])) {
-                    $this->hydrateToOneAssociation($entity, $name,
-                        $metadata->associationMappings[$name],
-                        $data['data']['id']
-                    );
-                } else {
-                    $this->hydrateToManyAssociation($entity, $name,
-                        $metadata->associationMappings[$name],
-                        array_map(
-                            function($relation) {
-                                if (isset($relation['id']) && isset($relation['type'])) {
-                                    return $relation['id'];
-                                }
+            foreach ($data['relationships'] as $name => $data) {
+                if (!isset($metadata->associationMappings[$name])) {
+                    throw new \Exception(sprintf('Relation `%s` association not found', $name));
+                }
 
-                                return ['attributes' => $relation];
-                            },
-                            $data['data']
-                        )
-                    );
+                if (is_array($data['data'])) {
+                    if (isset($data['data']['id']) && isset($data['data']['type'])) {
+                        $this->hydrateToOneAssociation($entity, $name,
+                            $metadata->associationMappings[$name],
+                            $data['data']['id']
+                        );
+                    } else {
+                        $this->hydrateToManyAssociation($entity, $name,
+                            $metadata->associationMappings[$name],
+                            array_map(
+                                function ($relation) {
+                                    if (isset($relation['id']) && isset($relation['type'])) {
+                                        return $relation['id'];
+                                    }
+
+                                    return ['attributes' => $relation];
+                                },
+                                $data['data']
+                            )
+                        );
+                    }
                 }
             }
         }
