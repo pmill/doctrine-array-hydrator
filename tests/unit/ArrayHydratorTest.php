@@ -1,8 +1,10 @@
 <?php
 namespace pmill\Doctrine\Hydrator\Test;
 
+use Doctrine\ORM\EntityManager;
 use Mockery as m;
 use pmill\Doctrine\Hydrator\ArrayHydrator;
+use pmill\Doctrine\Hydrator\Test\Fixture\Company;
 use pmill\Doctrine\Hydrator\Test\Fixture\Permission;
 
 class RouteTest extends TestCase
@@ -132,5 +134,27 @@ class RouteTest extends TestCase
     public function testUnkownClass()
     {
         $this->hydrator->hydrate('An\Unknown\Class', []);
+    }
+
+    public function testFetchAssociationEntity()
+    {
+        /** @var Fixture\User $user */
+        $user = new Fixture\User;
+        $company = new Company();
+        $company->setId(1);
+        $company->setName('testing');
+
+        /** @var EntityManager $entityManagerMock */
+        $entityManagerMock = m::mock($this->entityManager)
+            ->shouldReceive('find')->with(Company::class, 1)
+            ->andReturn($company)
+            ->getMock();
+
+        $this->hydrator = new ArrayHydrator($entityManagerMock);
+        $this->hydrator->setHydrateAssociationReferences(false);
+        $user = $this->hydrator->hydrate($user, ['company' => $company->getId()]);
+
+        $this->assertEquals($company->getId(), $user->getCompany()->getId());
+        $this->assertEquals($company->getName(), $user->getCompany()->getName());
     }
 }
