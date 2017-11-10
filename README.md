@@ -76,6 +76,33 @@ We can populate this object with an array, for example:
     $hydrator = new \pmill\Doctrine\Hydrator\ArrayHydrator($entityManager);
     $entity = $hydrator->hydrate('App\Entity\User', $data);
 
+We can populate user with JSON API resource data
+[Documentation](http://jsonapi.org/format/#document-resource-objects)
+
+    $data = [
+        'attributes'=> [
+            'name'=>'Fred Jones',
+            'email'=>'fred@example.com',
+        ],
+        'relationships' => [
+            'company' => [
+                'data' => ['id'=>1, 'type'=>'company'],
+            ],
+            'permissions' => [
+                'data' => [
+                    ['id'=>1,'type'=>'permission'],
+                    ['id'=>2,'type'=>'permission'],
+                    ['id'=>3,'type'=>'permission'],
+                    ['id'=>4,'type'=>'permission'],
+                    ['name' => 'New permission'],
+                ],
+            ],
+        ],
+    ];
+
+    $hydrator = new \pmill\Doctrine\Hydrator\JsonApiHydrator($entityManager);
+    $entity = $hydrator->hydrate('App\Entity\User', $data);
+
 Copyright
 ---------
 
