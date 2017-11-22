@@ -1,4 +1,5 @@
 <?php
+
 namespace pmill\Doctrine\Hydrator\Test;
 
 use Doctrine\ORM\EntityManager;
@@ -7,7 +8,7 @@ use pmill\Doctrine\Hydrator\ArrayHydrator;
 use pmill\Doctrine\Hydrator\Test\Fixture\Company;
 use pmill\Doctrine\Hydrator\Test\Fixture\Permission;
 
-class RouteTest extends TestCase
+class ArrayHydratorTest extends TestCase
 {
     /**
      * @var ArrayHydrator
