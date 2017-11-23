@@ -1,6 +1,7 @@
 <?php
 namespace pmill\Doctrine\Hydrator;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Exception;
@@ -63,10 +64,23 @@ class ArrayHydrator
         $reflectionObject = new \ReflectionObject($entity);
 
         $metaData = $this->entityManager->getClassMetadata(get_class($entity));
-
+        
+        $platform = $this->entityManager->getConnection()
+                                        ->getDatabasePlatform();
+        
         foreach ($metaData->columnNames as $propertyName) {
             if (isset($data[$propertyName]) && !in_array($propertyName, $metaData->identifier)) {
-                $entity = $this->setProperty($entity, $propertyName, $data[$propertyName], $reflectionObject);
+                $value = $data[$propertyName];
+                
+                if (array_key_exists('type', $metaData->fieldMappings[$propertyName])) {
+                    $fieldType = $metaData->fieldMappings[$propertyName]['type'];
+                    
+                    $type = Type::getType($fieldType);
+                    
+                    $value = $type->convertToPHPValue($value, $platform);
+                }
+
+                $entity = $this->setProperty($entity, $propertyName, $value, $reflectionObject);
             }
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace pmill\Doctrine\Hydrator\Test;
 
 use Doctrine\ORM\EntityManager;
@@ -7,7 +8,7 @@ use pmill\Doctrine\Hydrator\ArrayHydrator;
 use pmill\Doctrine\Hydrator\Test\Fixture\Company;
 use pmill\Doctrine\Hydrator\Test\Fixture\Permission;
 
-class RouteTest extends TestCase
+class ArrayHydratorTest extends TestCase
 {
     /**
      * @var ArrayHydrator
@@ -156,5 +157,22 @@ class RouteTest extends TestCase
 
         $this->assertEquals($company->getId(), $user->getCompany()->getId());
         $this->assertEquals($company->getName(), $user->getCompany()->getName());
+    }
+
+    public function testConvertType()
+    {
+        $data = [
+            'id'        => '1',
+            'duration'  => '50',
+            'startTime' => '2017-10-23 17:57:00',
+            'status'    => 'true',
+        ];
+
+        $call = new Fixture\Call();
+        $call = $this->hydrator->hydrate($call, $data);
+
+        $this->assertInternalType('integer', $call->getDuration());
+        $this->assertInstanceOf(\DateTime::class, $call->getStartTime());
+        $this->assertInternalType('bool', $call->isStatus());
     }
 }
