@@ -41,7 +41,7 @@ class Call
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -51,7 +51,7 @@ class Call
      *
      * @return Call
      */
-    public function setId(int $id): Call
+    public function setId($id)
     {
         $this->id = $id;
 
@@ -61,7 +61,7 @@ class Call
     /**
      * @return int
      */
-    public function getDuration(): int
+    public function getDuration()
     {
         return $this->duration;
     }
@@ -71,7 +71,7 @@ class Call
      *
      * @return Call
      */
-    public function setDuration(int $duration): Call
+    public function setDuration($duration)
     {
         $this->duration = $duration;
 
@@ -81,7 +81,7 @@ class Call
     /**
      * @return \DateTime
      */
-    public function getStartTime(): \DateTime
+    public function getStartTime()
     {
         return $this->startTime;
     }
@@ -91,7 +91,7 @@ class Call
      *
      * @return Call
      */
-    public function setStartTime(\DateTime $startTime): Call
+    public function setStartTime(\DateTime $startTime)
     {
         $this->startTime = $startTime;
 
@@ -101,7 +101,7 @@ class Call
     /**
      * @return bool
      */
-    public function isStatus(): bool
+    public function isStatus()
     {
         return $this->status;
     }
@@ -111,7 +111,7 @@ class Call
      *
      * @return Call
      */
-    public function setStatus(bool $status): Call
+    public function setStatus($status)
     {
         $this->status = $status;
 

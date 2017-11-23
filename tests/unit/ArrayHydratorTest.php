@@ -5,7 +5,6 @@ namespace pmill\Doctrine\Hydrator\Test;
 use Doctrine\ORM\EntityManager;
 use Mockery as m;
 use pmill\Doctrine\Hydrator\ArrayHydrator;
-use pmill\Doctrine\Hydrator\Test\Fixture\Call;
 use pmill\Doctrine\Hydrator\Test\Fixture\Company;
 use pmill\Doctrine\Hydrator\Test\Fixture\Permission;
 
