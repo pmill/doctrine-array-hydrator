@@ -42,7 +42,7 @@ class ArrayHydratorTest extends TestCase
      *
      * @throws \Exception
      */
-    public function testHydratePropertiesDifferentNames()
+    public function testHydratePropertiesByColumn()
     {
         $data = [
             'address_id'=>103,
@@ -51,6 +51,7 @@ class ArrayHydratorTest extends TestCase
             'country'=>'Republic',
         ];
 
+        $this->hydrator->setHydrateBy(ArrayHydrator::HYDRATE_BY_COLUMN);
         $address = new Fixture\Address;
         $address = $this->hydrator->hydrate($address, $data);
 
@@ -66,7 +67,7 @@ class ArrayHydratorTest extends TestCase
      *
      * @throws \Exception
      */
-    public function testHydratePropertiesDifferentNamesWithId()
+    public function testHydratePropertiesByColumnWithId()
     {
         $data = [
             'address_id'=>103,
@@ -76,6 +77,7 @@ class ArrayHydratorTest extends TestCase
         ];
 
         $this->hydrator->setHydrateId(true);
+        $this->hydrator->setHydrateBy(ArrayHydrator::HYDRATE_BY_COLUMN);
         $address = new Fixture\Address;
         $address = $this->hydrator->hydrate($address, $data);
 
@@ -89,6 +91,7 @@ class ArrayHydratorTest extends TestCase
     {
         $data = [
             'company'=>1,
+            'address'=>103,
         ];
 
         $user = new Fixture\User;
@@ -96,6 +99,23 @@ class ArrayHydratorTest extends TestCase
         $user = $this->hydrator->hydrate($user, $data);
 
         $this->assertEquals(1, $user->getCompany()->getId());
+        $this->assertEquals(103, $user->getAddress()->getId());
+    }
+
+    public function testHydrateManyToOneAssociationByColumn()
+    {
+        $data = [
+            'company_id'=>1,
+            'foreign_address_id'=>103,
+        ];
+
+        $this->hydrator->setHydrateBy(ArrayHydrator::HYDRATE_BY_COLUMN);
+        $user = new Fixture\User;
+        /** @var Fixture\User $user */
+        $user = $this->hydrator->hydrate($user, $data);
+
+        $this->assertEquals(1, $user->getCompany()->getId());
+        $this->assertEquals(103, $user->getAddress()->getId());
     }
 
     public function testHydrateOneToManyAssociations()
