@@ -35,7 +35,7 @@ class User
 
     /**
      * @ORM\ManyToOne(targetEntity="Address")
-     * @ORM\JoinColumn(name="address_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="address_id")
      * @var Address
      */
     protected $address;

@@ -10,19 +10,19 @@ use Doctrine\ORM\Mapping as ORM;
 class Address
 {
     /**
-     * @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue
+     * @ORM\Id @ORM\Column(type="integer", name="address_id") @ORM\GeneratedValue
      * @var int
      */
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="street_address")
      * @var string
      */
-    protected $street_address;
+    protected $streetAddress;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="town_or_similar")
      * @var string
      */
     protected $city;
@@ -54,15 +54,15 @@ class Address
      */
     public function getStreetAddress()
     {
-        return $this->street_address;
+        return $this->streetAddress;
     }
 
     /**
-     * @param string $street_address
+     * @param string $streetAddress
      */
-    public function setStreetAddress($street_address)
+    public function setStreetAddress($streetAddress)
     {
-        $this->street_address = $street_address;
+        $this->streetAddress = $streetAddress;
     }
 
     /**

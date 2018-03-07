@@ -37,6 +37,54 @@ class ArrayHydratorTest extends TestCase
         $this->assertEquals($data['email'], $user->getEmail());
     }
 
+    /**
+     * Tests the hydration of a table where database column names and entity field names differ
+     *
+     * @throws \Exception
+     */
+    public function testHydratePropertiesDifferentNames()
+    {
+        $data = [
+            'address_id'=>103,
+            'street_address'=>'Super Street 12',
+            'town_or_similar'=>'Farmville at the Sea',
+            'country'=>'Republic',
+        ];
+
+        $address = new Fixture\Address;
+        $address = $this->hydrator->hydrate($address, $data);
+
+        $this->assertNull($address->getId());
+        $this->assertEquals($data['street_address'], $address->getStreetAddress());
+        $this->assertEquals($data['town_or_similar'], $address->getCity());
+        $this->assertEquals($data['country'], $address->getCountry());
+    }
+
+    /**
+     * Tests the hydration of a table where database column names and entity field names differ and we also want to
+     * hydrate the primary key
+     *
+     * @throws \Exception
+     */
+    public function testHydratePropertiesDifferentNamesWithId()
+    {
+        $data = [
+            'address_id'=>103,
+            'street_address'=>'Super Street 12',
+            'town_or_similar'=>'Farmville at the Sea',
+            'country'=>'Republic',
+        ];
+
+        $this->hydrator->setHydrateId(true);
+        $address = new Fixture\Address;
+        $address = $this->hydrator->hydrate($address, $data);
+
+        $this->assertEquals($data['address_id'], $address->getId());
+        $this->assertEquals($data['street_address'], $address->getStreetAddress());
+        $this->assertEquals($data['town_or_similar'], $address->getCity());
+        $this->assertEquals($data['country'], $address->getCountry());
+    }
+
     public function testHydrateManyToOneAssociation()
     {
         $data = [
