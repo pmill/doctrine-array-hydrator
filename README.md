@@ -22,86 +22,101 @@ Example
 
 Given this doctrine entity:
 
-    <?php
-    namespace App\Entity;
+```PHP
+<?php
+
+namespace App\Entity;
     
-    use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM;
+use pmill\Doctrine\Hydrator\Test\Fixture\Company;
+use pmill\Doctrine\Hydrator\Test\Fixture\Permission;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="users")
+ */
+class User
+{
+   /**
+    * @ORM\Id 
+    * @ORM\Column(type="integer") 
+    * @ORM\GeneratedValue
+    * 
+    * @var int
+    */
+    protected $id;
     
     /**
-     * @ORM\Entity
-     * @ORM\Table(name="users")
+     * @ORM\Column(type="string")
+     * 
+     * @var string
      */
-    class User
-    {
-        /**
-         * @ORM\Id @ORM\Column(type="integer") @ORM\GeneratedValue
-         * @var int
-         */
-        protected $id;
+    protected $name;
     
-        /**
-         * @ORM\Column(type="string")
-         * @var string
-         */
-        protected $name;
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * @var string
+     */
+    protected $email;
     
-        /**
-         * @ORM\Column(type="string")
-         * @var string
-         */
-        protected $email;
-    
-        /**
-         * @ManyToOne(targetEntity="Company")
-         * @var Company
-         */
-        protected $company;
+    /**
+     * @ManyToOne(targetEntity="Company")
+     * 
+     * @var Company
+     */
+    protected $company;
         
-        /**
-         * @OneToMany(targetEntity="Permission", mappedBy="product")
-         * @var Permission[]
-         */
-        protected $permissions;
-        ...
+    /**
+     * @OneToMany(targetEntity="Permission", mappedBy="product")
+     * 
+     * @var Permission[]
+     */
+    protected $permissions;
+}
+```
 
 We can populate this object with an array, for example:
 
-    $data = [
-        'name'=>'Fred Jones',
-        'email'=>'fred@example.com',
-        'company'=>2,
-        'permissions'=>[1, 2, 3, 4];
-    ];
+```PHP
+$data = [
+    'name'        => 'Fred Jones',
+    'email'       => 'fred@example.com',
+    'company'     => 2,
+    'permissions' => [1, 2, 3, 4]
+];
 
-    $hydrator = new \pmill\Doctrine\Hydrator\ArrayHydrator($entityManager);
-    $entity = $hydrator->hydrate('App\Entity\User', $data);
+$hydrator = new \pmill\Doctrine\Hydrator\ArrayHydrator($entityManager);
+$entity   = $hydrator->hydrate('App\Entity\User', $data);
+```
 
 We can populate user with JSON API resource data
 [Documentation](http://jsonapi.org/format/#document-resource-objects)
-
-    $data = [
-        'attributes'=> [
-            'name'=>'Fred Jones',
-            'email'=>'fred@example.com',
+```PHP
+$data = [
+    'attributes'    => [
+        'name'  => 'Fred Jones',
+        'email' => 'fred@example.com',
+    ],
+    'relationships' => [
+        'company'     => [
+            'data' => ['id' => 1, 'type' => 'company'],
         ],
-        'relationships' => [
-            'company' => [
-                'data' => ['id'=>1, 'type'=>'company'],
-            ],
-            'permissions' => [
-                'data' => [
-                    ['id'=>1,'type'=>'permission'],
-                    ['id'=>2,'type'=>'permission'],
-                    ['id'=>3,'type'=>'permission'],
-                    ['id'=>4,'type'=>'permission'],
-                    ['name' => 'New permission'],
-                ],
-            ],
-        ],
-    ];
-
-    $hydrator = new \pmill\Doctrine\Hydrator\JsonApiHydrator($entityManager);
-    $entity = $hydrator->hydrate('App\Entity\User', $data);
+        'permissions' => [
+            'data' => [
+                ['id' => 1, 'type' => 'permission'],
+                ['id' => 2, 'type' => 'permission'],
+                ['id' => 3, 'type' => 'permission'],
+                ['id' => 4, 'type' => 'permission'],
+                ['name' => 'New permission']
+            ]
+        ]
+    ]
+];
+    
+$hydrator = new \pmill\Doctrine\Hydrator\JsonApiHydrator($entityManager);
+$entity   = $hydrator->hydrate('App\Entity\User', $data);
+```
 
 Copyright
 ---------
