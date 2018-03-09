@@ -177,8 +177,8 @@ class ArrayHydrator
         }
 
         // from this point it is self::HYDRATE_BY_COLUMN
-        if (isset($mapping['joinColumns'])) {
-            // we do not support compound foreign keys (yet)
+        // we do not support compound foreign keys (yet)
+        if (isset($mapping['joinColumns']) && count($mapping['joinColumns']) === 1) {
             $columnName = $mapping['joinColumns'][0]['name'];
 
             return isset($data[$columnName]) ? $data[$columnName] : null;

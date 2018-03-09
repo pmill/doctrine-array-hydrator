@@ -47,6 +47,12 @@ class User
     protected $permissions;
 
     /**
+     * @ORM\OneToOne(targetEntity="Preference", mappedBy="user")
+     * @var Preference
+     */
+    protected $preference;
+
+    /**
      * @return int
      */
     public function getId()
@@ -140,5 +146,21 @@ class User
     public function setPermissions($permissions)
     {
         $this->permissions = $permissions;
+    }
+
+    /**
+     * @return Preference
+     */
+    public function getPreference()
+    {
+        return $this->preference;
+    }
+
+    /**
+     * @param Preference $preference
+     */
+    public function setPreference($preference)
+    {
+        $this->preference = $preference;
     }
 }
