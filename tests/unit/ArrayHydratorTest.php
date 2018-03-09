@@ -37,10 +37,61 @@ class ArrayHydratorTest extends TestCase
         $this->assertEquals($data['email'], $user->getEmail());
     }
 
+    /**
+     * Tests the hydration of a table where database column names and entity field names differ
+     *
+     * @throws \Exception
+     */
+    public function testHydratePropertiesByColumn()
+    {
+        $data = [
+            'address_id'=>103,
+            'street_address'=>'Super Street 12',
+            'town_or_similar'=>'Farmville at the Sea',
+            'country'=>'Republic',
+        ];
+
+        $this->hydrator->setHydrateBy(ArrayHydrator::HYDRATE_BY_COLUMN);
+        $address = new Fixture\Address;
+        $address = $this->hydrator->hydrate($address, $data);
+
+        $this->assertNull($address->getId());
+        $this->assertEquals($data['street_address'], $address->getStreetAddress());
+        $this->assertEquals($data['town_or_similar'], $address->getCity());
+        $this->assertEquals($data['country'], $address->getCountry());
+    }
+
+    /**
+     * Tests the hydration of a table where database column names and entity field names differ and we also want to
+     * hydrate the primary key
+     *
+     * @throws \Exception
+     */
+    public function testHydratePropertiesByColumnWithId()
+    {
+        $data = [
+            'address_id'=>103,
+            'street_address'=>'Super Street 12',
+            'town_or_similar'=>'Farmville at the Sea',
+            'country'=>'Republic',
+        ];
+
+        $this->hydrator->setHydrateId(true);
+        $this->hydrator->setHydrateBy(ArrayHydrator::HYDRATE_BY_COLUMN);
+        $address = new Fixture\Address;
+        $address = $this->hydrator->hydrate($address, $data);
+
+        $this->assertEquals($data['address_id'], $address->getId());
+        $this->assertEquals($data['street_address'], $address->getStreetAddress());
+        $this->assertEquals($data['town_or_similar'], $address->getCity());
+        $this->assertEquals($data['country'], $address->getCountry());
+    }
+
     public function testHydrateManyToOneAssociation()
     {
         $data = [
             'company'=>1,
+            'address'=>103,
         ];
 
         $user = new Fixture\User;
@@ -48,6 +99,23 @@ class ArrayHydratorTest extends TestCase
         $user = $this->hydrator->hydrate($user, $data);
 
         $this->assertEquals(1, $user->getCompany()->getId());
+        $this->assertEquals(103, $user->getAddress()->getId());
+    }
+
+    public function testHydrateManyToOneAssociationByColumn()
+    {
+        $data = [
+            'company_id'=>1,
+            'foreign_address_id'=>103,
+        ];
+
+        $this->hydrator->setHydrateBy(ArrayHydrator::HYDRATE_BY_COLUMN);
+        $user = new Fixture\User;
+        /** @var Fixture\User $user */
+        $user = $this->hydrator->hydrate($user, $data);
+
+        $this->assertEquals(1, $user->getCompany()->getId());
+        $this->assertEquals(103, $user->getAddress()->getId());
     }
 
     public function testHydrateOneToManyAssociations()
