@@ -245,6 +245,16 @@ class ArrayHydrator
     protected function setProperty($entity, $propertyName, $value, $reflectionObject = null)
     {
         $reflectionObject = is_null($reflectionObject) ? new \ReflectionObject($entity) : $reflectionObject;
+        
+        if (!$reflectionObject->hasProperty($propertyName)) {
+            $parentReflectionClass = $reflectionObject->getParentClass();
+            if (!$parentReflectionClass) {
+                throw new \Exception(sprintf('Property "%s" not found in class "%s".', $propertyName, $reflectionObject->getName()));
+            }
+
+            return $this->setProperty($entity, $propertyName, $value, $parentReflectionClass);
+        }
+        
         $property = $reflectionObject->getProperty($propertyName);
         $property->setAccessible(true);
         $property->setValue($entity, $value);
