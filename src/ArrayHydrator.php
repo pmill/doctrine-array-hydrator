@@ -2,7 +2,7 @@
 namespace pmill\Doctrine\Hydrator;
 
 use Doctrine\DBAL\Types\Type;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Exception;
 
@@ -19,7 +19,7 @@ class ArrayHydrator
     const HYDRATE_BY_COLUMN = 2;
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $entityManager;
 
@@ -48,9 +48,9 @@ class ArrayHydrator
     protected $hydrateId = false;
 
     /**
-     * @param EntityManager $entityManager
+     * @param EntityManagerInterface $entityManager
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
     }
