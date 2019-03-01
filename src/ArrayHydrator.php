@@ -114,6 +114,7 @@ class ArrayHydrator
                                         ->getDatabasePlatform();
 
         $skipFields = $this->hydrateId ? [] : $metaData->identifier;
+        $jsonTypes = [Type::JSON, Type::JSON_ARRAY];
 
         foreach ($metaData->fieldNames as $fieldName) {
             $dataKey = $this->hydrateBy === self::HYDRATE_BY_FIELD ? $fieldName : $metaData->getColumnName($fieldName);
@@ -126,7 +127,9 @@ class ArrayHydrator
 
                     $type = Type::getType($fieldType);
 
-                    $value = $type->convertToPHPValue($value, $platform);
+                    if (! in_array($type->getName(), $jsonTypes, true)) {
+                        $value = $type->convertToPHPValue($value, $platform);
+                    }
                 }
 
                 $entity = $this->setProperty($entity, $fieldName, $value, $reflectionObject);
