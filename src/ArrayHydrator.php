@@ -114,7 +114,7 @@ class ArrayHydrator
                                         ->getDatabasePlatform();
 
         $skipFields = $this->hydrateId ? [] : $metaData->identifier;
-        $jsonTypes = [Type::JSON, Type::JSON_ARRAY];
+        $jsonTypes = ['json', 'json_array'];
 
         foreach ($metaData->fieldNames as $fieldName) {
             $dataKey = $this->hydrateBy === self::HYDRATE_BY_FIELD ? $fieldName : $metaData->getColumnName($fieldName);
