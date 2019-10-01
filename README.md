@@ -4,7 +4,7 @@ Doctrine Array to Entity Hydrator
 Introduction
 ------------
 
-[![Build Status](https://secure.travis-ci.org/pmill/doctrine-array-hydrator.svg?branch=master)](http://travis-ci.org/pmill/doctrine-array-hydrator) [![Test Coverage](https://scrutinizer-ci.com/g/pmill/doctrine-array-hydrator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pmill/doctrine-array-hydrator/) https://poser.pugx.org/pmill/doctrine-array-hydrator/downloads
+[![Build Status](https://secure.travis-ci.org/pmill/doctrine-array-hydrator.svg?branch=master)](http://travis-ci.org/pmill/doctrine-array-hydrator) [![Test Coverage](https://scrutinizer-ci.com/g/pmill/doctrine-array-hydrator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/pmill/doctrine-array-hydrator/) ![Downloads](https://poser.pugx.org/pmill/doctrine-array-hydrator/downloads)
 
 
 A hydrator for doctrine 2 that converts an array to the entity of your choice.
