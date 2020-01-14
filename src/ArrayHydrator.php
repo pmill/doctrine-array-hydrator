@@ -118,7 +118,7 @@ class ArrayHydrator
         foreach ($metaData->fieldNames as $fieldName) {
             $dataKey = $this->hydrateBy === self::HYDRATE_BY_FIELD ? $fieldName : $metaData->getColumnName($fieldName);
 
-            if (isset($data[$dataKey]) && !in_array($fieldName, $skipFields, true)) {
+            if (array_key_exists($dataKey, $data) && !in_array($fieldName, $skipFields, true)) {
                 $value = $data[$dataKey];
 
                 if (array_key_exists('type', $metaData->fieldMappings[$fieldName])) {
