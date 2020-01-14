@@ -189,6 +189,26 @@ class ArrayHydratorTest extends TestCase
         $this->assertEquals(5, $permissions[4]->getId());
     }
 
+    public function testHydrateNullValues()
+    {
+        $data = [
+            'name'  => null,
+            'email' => null,
+        ];
+        
+        $user = new Fixture\User;
+        /** @var Fixture\User $user */
+        $user = $this->hydrator->hydrate($user, $data);
+        $user->setName('name');
+        $user->setEmail('email');
+
+        $this->assertEquals('name', $user->getName());
+        $this->assertEquals('email', $user->getEmail());
+        $user = $this->hydrator->hydrate($user, $data);
+        $this->assertNull($user->getName());
+        $this->assertNull($user->getEmail());
+    }
+
     /**
      * @expectedException \Exception
      */
