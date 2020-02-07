@@ -1,6 +1,7 @@
 <?php
 namespace pmill\Doctrine\Hydrator;
 
+use ArrayAccess;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -220,7 +221,15 @@ class ArrayHydrator
         $reflectionObject = new \ReflectionObject($entity);
         $values = is_array($value) ? $value : [$value];
 
+        $propertyRef = $reflectionObject->getProperty($propertyName);
+        $propertyRef->setAccessible(true);
+        $propertyValue = $propertyRef->getValue($entity);
+
         $assocationObjects = [];
+        if (is_array($propertyValue) || $propertyValue instanceof ArrayAccess) {
+            $assocationObjects = $propertyValue;
+        }
+
         foreach ($values as $value) {
             if (is_array($value)) {
                 $assocationObjects[] = $this->hydrate($mapping['targetEntity'], $value);
