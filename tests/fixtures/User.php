@@ -1,6 +1,7 @@
 <?php
 namespace pmill\Doctrine\Hydrator\Test\Fixture;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,6 +52,20 @@ class User
      * @var Preference
      */
     protected $preference;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Tag", mappedBy="user")
+     * @var ArrayCollection
+     */
+    protected $tags;
+
+    /**
+     * Constructor of the class
+     */
+    public function __construct()
+    {
+        $this->tags = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -162,5 +177,13 @@ class User
     public function setPreference($preference)
     {
         $this->preference = $preference;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }
