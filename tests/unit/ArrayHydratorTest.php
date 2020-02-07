@@ -2,6 +2,7 @@
 
 namespace pmill\Doctrine\Hydrator\Test;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Mockery as m;
 use pmill\Doctrine\Hydrator\ArrayHydrator;
@@ -262,5 +263,25 @@ class ArrayHydratorTest extends TestCase
         $this->assertInternalType('integer', $call->getDuration());
         $this->assertInstanceOf(\DateTime::class, $call->getStartTime());
         $this->assertInternalType('bool', $call->isStatus());
+    }
+
+    public function testOneToManySavePreviousPropertyValue()
+    {
+        $user = new Fixture\User();
+
+        $this->assertInstanceOf(ArrayCollection::class, $user->getTags());
+
+        $user = $this->hydrator->hydrate($user, ['tags' => [
+            ['name' => 'foo'],
+            ['name' => 'bar'],
+        ]]);
+
+        $this->assertInstanceOf(ArrayCollection::class, $user->getTags());
+
+        $this->assertCount(2, $user->getTags());
+
+        $this->assertSame('foo', $user->getTags()[0]->getName());
+
+        $this->assertSame('bar', $user->getTags()[1]->getName());
     }
 }
